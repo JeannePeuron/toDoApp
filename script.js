@@ -33,6 +33,8 @@ add.addEventListener("click", () => {
   } else {
     taskArray.push(`${taskInput.value}`);
 
+    taskList.innerHTML = "";
+
     for (let i = 0; i < taskArray.length; i++) {
       taskList.innerHTML += `
 
@@ -40,19 +42,18 @@ add.addEventListener("click", () => {
             <div id="checkbox">
                 <label for="check">Fait</label>
                 <input type="checkbox" id="check">
+                <label for="notCheck">Non fait</label>
+                <input type="checkbox" id="notCheck">
+
+            </div>
 
                 ${taskArray[i]}
 
-                <label for="notCheck">Non fait</label>
-                 <input type="checkbox" id="notCheck">
-         </div>
+                </br>
 
      <button type="button">Supprimer</button>
     </li>
         `;
-      // Il faut qu'à chaque tour de boucle, on ajoute une checkbox, le texte et le boutton
-      // Dans le task
-      //   console.log(taskArray[i]);
     }
   }
 });
