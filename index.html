@@ -22,7 +22,7 @@
                 <label for="task-input">Nouvelle tâche</label>
                 <div class="row">
                     <input id="task-input" name="task" type="text" placeholder="Ex: relire le kata DOM" />
-                    <button type="submit">Ajouter</button>
+                    <button type="submit" id="add">Ajouter</button>
                 </div>
 
                 <p id="form-error" role="alert" aria-live="polite"></p>
@@ -33,14 +33,16 @@
             <h2>Liste</h2>
 
             <div class="filters" role="tablist" aria-label="Filtres des tâches">
-                <button type="button" data-filter="all">Toutes</button>
-                <button type="button" data-filter="todo">À faire</button>
-                <button type="button" data-filter="done">Faites</button>
+                <button type="button" data-filter="all" id="buttonAll">Toutes</button>
+                <button type="button" data-filter="todo" id="buttonTodo">À faire</button>
+                <button type="button" data-filter="done" id="buttonDone">Faites</button>
             </div>
 
             <p class="counters" id="counters"></p>
 
-            <ul id="task-list" class="list" aria-label="Liste des tâches"></ul>
+            <ul id="task-list" class="list" aria-label="Liste des tâches">
+
+            </ul>
         </section>
     </main>
 </body>
