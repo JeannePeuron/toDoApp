@@ -11,6 +11,15 @@
 
 // Si le champ n'est pas vide alors on va chercher la liste et on l'affiche à l'intérieur le texte.
 
+// 2) Afficher la liste
+// Chaque tâche contient :
+
+// un checkbox (fait / pas fait)
+
+// le texte
+
+// un bouton “Supprimer”
+
 const add = document.getElementById("add");
 const taskInput = document.getElementById("task-input");
 const formError = document.getElementById("form-error");
@@ -24,7 +33,9 @@ taskForm.addEventListener("submit", function (e) {
   //   console.log("Formulaire envoyé sans rechargement");
 });
 
-add.addEventListener("click", () => {
+add.addEventListener("click", () => addTask());
+
+function addTask() {
   if (taskInput.value === "") {
     formError.innerText = `
         Veuillez saisir une tâche
@@ -32,7 +43,10 @@ add.addEventListener("click", () => {
     // console.log("Veuillez saisir une tâche");
   } else {
     taskArray.push(`${taskInput.value}`);
+    showTaskList();
+  }
 
+  function showTaskList() {
     taskList.innerHTML = "";
 
     for (let i = 0; i < taskArray.length; i++) {
@@ -40,10 +54,10 @@ add.addEventListener("click", () => {
 
         <li id="task">
             <div id="checkbox">
-                <label for="check">Fait</label>
-                <input type="checkbox" id="check">
-                <label for="notCheck">Non fait</label>
-                <input type="checkbox" id="notCheck">
+                <label for="done">Fait</label>
+                <input type="checkbox" id="done" name="done">
+                <label for="todo">Non fait</label>
+                <input type="checkbox" id="notCheck" name="todo">
 
             </div>
 
@@ -56,16 +70,4 @@ add.addEventListener("click", () => {
         `;
     }
   }
-});
-
-// 2) Afficher la liste
-// Chaque tâche contient :
-
-// un checkbox (fait / pas fait)
-
-// le texte
-
-// un bouton “Supprimer”
-
-// Remplacer le innerHTML par un push sur un tableau. Donc initialiser un tableau.
-// Puis, mapper sur le tableau en ajoutant la checkbox, le texte et le bouton.
+}
