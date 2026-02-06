@@ -42,7 +42,12 @@ function addTask() {
         `;
     // console.log("Veuillez saisir une tâche");
   } else {
-    taskArray.push(`${taskInput.value}`);
+    let task = { task: taskInput.value, state: false };
+
+    taskArray.push(task);
+
+    console.log(taskArray);
+
     showTaskList();
   }
 
@@ -61,7 +66,7 @@ function addTask() {
 
             </div>
 
-                ${taskArray[i]}
+                ${taskArray[i].task}
 
                 </br>
 
@@ -71,3 +76,35 @@ function addTask() {
     }
   }
 }
+
+// LOGIQUE ÉTAPE 3 – FILTRES & ÉTAT DES TÂCHES
+
+// 1) Dans addTask :
+// - Quand j’ajoute une tâche dans taskArray, je ne push pas seulement le texte (taskInput.value)
+// - Je dois aussi stocker l’état de la tâche
+// - Par défaut, une tâche nouvellement créée n’est PAS faite → état = false
+
+// → taskArray doit donc contenir des tâches avec :
+//   - le texte
+//   - un booléen (fait / non fait)
+
+// 2) Checkbox "Fait / Non fait" :
+// - La checkbox ne crée pas une nouvelle tâche
+// - Elle sert uniquement à MODIFIER l’état d’une tâche existante
+// - Quand l’utilisateur clique sur "Fait", je mets l’état de la tâche correspondante à true
+// - Quand il décoche, je remets l’état à false
+// - Cette modification doit se faire directement dans taskArray
+
+// 3) Filtrage :
+// - Je ne dois JAMAIS modifier taskArray directement pour filtrer
+// - Je crée d’abord une COPIE du tableau taskArray dans une fonction
+// - Cette copie sert uniquement à l’affichage
+
+// 4) Bouton filtre "Non fait" :
+// - Je travaille sur la copie du tableau
+// - J’enlève (avec splice) les tâches qui sont faites (état === true)
+// - J’appelle ensuite showTaskList avec ce tableau filtré
+
+// Règle importante :
+// taskArray = source de vérité
+// L’affichage et les filtres ne sont qu’une vue de ce tableau
