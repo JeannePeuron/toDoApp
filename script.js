@@ -28,46 +28,135 @@ const taskForm = document.getElementById("task-form");
 
 let taskArray = [];
 
+// Empêche le rechargement du formulaire
 taskForm.addEventListener("submit", function (e) {
   e.preventDefault();
-  //   console.log("Formulaire envoyé sans rechargement");
+  addTask();
 });
 
-add.addEventListener("click", () => addTask());
+// Bouton ajouter
+add.addEventListener("click", function () {
+  addTask();
+});
 
 function addTask() {
   if (taskInput.value === "") {
-    formError.innerText = `
-        Veuillez saisir une tâche
-        `;
-    // console.log("Veuillez saisir une tâche");
-  } else {
-    taskArray.push(`${taskInput.value}`);
-    showTaskList();
+    formError.innerText = "Veuillez saisir une tâche";
+    return;
   }
 
-  function showTaskList() {
-    taskList.innerHTML = "";
+  formError.innerText = "";
 
-    for (let i = 0; i < taskArray.length; i++) {
-      taskList.innerHTML += `
+  let task = {
+    task: taskInput.value,
+    state: false,
+  };
 
-        <li id="task">
-            <div id="checkbox">
-                <label for="done">Fait</label>
-                <input type="checkbox" id="done" name="done">
-                <label for="todo">Non fait</label>
-                <input type="checkbox" id="notCheck" name="todo">
+  taskArray.push(task);
+  taskInput.value = "";
 
-            </div>
+  showTaskList();
+}
 
-                ${taskArray[i]}
+// Affichage des tâches avec une checkbox
+function showTaskList() {
+  taskList.innerHTML = "";
 
-                </br>
+  for (let i = 0; i < taskArray.length; i++) {
+    let checked = "";
+    let style = "";
 
-     <button type="button">Supprimer</button>
-    </li>
-        `;
+    if (taskArray[i].state === true) {
+      checked = "checked";
+      style = "text-decoration: line-through";
     }
+
+    taskList.innerHTML += `
+      <li>
+        <input
+          type="checkbox"
+          class="done-checkbox"
+          data-index="${i}"
+          ${checked}
+        >
+
+        <span style="${style}">
+          ${taskArray[i].task}
+        </span>
+      </li>
+    `;
   }
 }
+
+// Gestion du clic sur les checkbox
+taskList.addEventListener("click", function (e) {
+  if (e.target.classList.contains("done-checkbox")) {
+    let index = e.target.dataset.index;
+    taskArray[index].state = e.target.checked;
+    console.log(taskArray);
+    showTaskList();
+  }
+});
+
+const buttonTodo = document.getElementById("buttonTodo");
+const buttonDone = document.getElementById("buttonDone");
+const buttonAll = document.getElementById("buttonAll");
+
+// Créer une copie de taskArray
+// Splice que les indexs qui ont un state false = à faire
+//
+// Et appelle la fonction showTaskList avec ce tableau à jour
+
+buttonTodo.addEventListener("click", function () {
+  let newTaskArray = [...taskArray];
+
+  for (let i = newTaskArray.length - 1; i >= 0; i--) {
+    if (newTaskArray[i].state == true) {
+      newTaskArray.splice(i, 1);
+      console.log(newTaskArray);
+    }
+  }
+
+  taskArray = newTaskArray;
+
+  showTaskList();
+});
+
+buttonDone.addEventListener("click", function () {
+  let newTaskArray = [...taskArray];
+
+  for (let i = newTaskArray.length - 1; i >= 0; i--) {
+    if (newTaskArray[i].state == false) {
+      newTaskArray.splice(i, 1);
+      console.log(newTaskArray);
+    }
+  }
+
+  taskArray = newTaskArray;
+
+  showTaskList();
+});
+
+buttonAll.addEventListener("click", function () {
+  taskArray = taskArray;
+  console.log(taskArray);
+  showTaskList();
+});
+
+// LOGIQUE ÉTAPE 3 – FILTRES & ÉTAT DES TÂCHES
+
+// ON NE PEUT PAS METTRE DE LISTENER A UNE CHECKBOX
+
+// 3) Filtrage :
+// - Je ne dois JAMAIS modifier taskArray directement pour filtrer
+// - Je crée d’abord une COPIE du tableau taskArray dans une fonction
+// - Cette copie sert uniquement à l’affichage
+
+// 4) Bouton filtre "Non fait" :
+// - Je travaille sur la copie du tableau
+// - J’enlève (avec splice) les tâches qui sont faites (état === true)
+// - J’appelle ensuite showTaskList avec ce tableau filtré
+
+// Règle importante :
+// taskArray = source de vérité
+// L’affichage et les filtres ne sont qu’une vue de ce tableau
