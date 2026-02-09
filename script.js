@@ -28,54 +28,75 @@ const taskForm = document.getElementById("task-form");
 
 let taskArray = [];
 
+// Empêche le rechargement du formulaire
 taskForm.addEventListener("submit", function (e) {
   e.preventDefault();
-  //   console.log("Formulaire envoyé sans rechargement");
+  addTask();
 });
 
-add.addEventListener("click", () => addTask());
+// Bouton ajouter
+add.addEventListener("click", function () {
+  addTask();
+});
 
 function addTask() {
   if (taskInput.value === "") {
-    formError.innerText = `
-        Veuillez saisir une tâche
-        `;
-    // console.log("Veuillez saisir une tâche");
-  } else {
-    let task = { task: taskInput.value, state: false };
-
-    taskArray.push(task);
-
-    console.log(taskArray);
-
-    showTaskList();
+    formError.innerText = "Veuillez saisir une tâche";
+    return;
   }
 
-  function showTaskList() {
-    taskList.innerHTML = "";
+  formError.innerText = "";
 
-    for (let i = 0; i < taskArray.length; i++) {
-      taskList.innerHTML += `
+  let task = {
+    task: taskInput.value,
+    state: false,
+  };
 
-        <li id="task">
-            <div id="checkbox">
-                <label for="done">Fait</label>
-                <input type="checkbox" id="done" name="done">
-                <label for="todo">Non fait</label>
-                <input type="checkbox" id="notCheck" name="todo">
+  taskArray.push(task);
+  taskInput.value = "";
 
-            </div>
+  showTaskList();
+}
 
-                ${taskArray[i].task}
+// Affichage des tâches avec une checkbox
+function showTaskList() {
+  taskList.innerHTML = "";
 
-                </br>
+  for (let i = 0; i < taskArray.length; i++) {
+    let checked = "";
+    let style = "";
 
-     <button type="button">Supprimer</button>
-    </li>
-        `;
+    if (taskArray[i].state === true) {
+      checked = "checked";
+      style = "text-decoration: line-through";
     }
+
+    taskList.innerHTML += `
+      <li>
+        <input
+          type="checkbox"
+          class="done-checkbox"
+          data-index="${i}"
+          ${checked}
+        >
+
+        <span style="${style}">
+          ${taskArray[i].task}
+        </span>
+      </li>
+    `;
   }
 }
+
+// Gestion du clic sur les checkbox
+taskList.addEventListener("click", function (e) {
+  if (e.target.classList.contains("done-checkbox")) {
+    let index = e.target.dataset.index;
+    taskArray[index].state = e.target.checked;
+    console.log(taskArray);
+    showTaskList();
+  }
+});
 
 // LOGIQUE ÉTAPE 3 – FILTRES & ÉTAT DES TÂCHES
 
@@ -94,6 +115,8 @@ function addTask() {
 // - Quand l’utilisateur clique sur "Fait", je mets l’état de la tâche correspondante à true
 // - Quand il décoche, je remets l’état à false
 // - Cette modification doit se faire directement dans taskArray
+
+// ON NE PEUT PAS METTRE DE LISTENER A UNE CHECKBOX
 
 // 3) Filtrage :
 // - Je ne dois JAMAIS modifier taskArray directement pour filtrer
