@@ -98,23 +98,52 @@ taskList.addEventListener("click", function (e) {
   }
 });
 
+const buttonTodo = document.getElementById("buttonTodo");
+const buttonDone = document.getElementById("buttonDone");
+const buttonAll = document.getElementById("buttonAll");
+
+// Créer une copie de taskArray
+// Splice que les indexs qui ont un state false = à faire
+//
+// Et appelle la fonction showTaskList avec ce tableau à jour
+
+buttonTodo.addEventListener("click", function () {
+  let newTaskArray = [...taskArray];
+
+  for (let i = newTaskArray.length - 1; i >= 0; i--) {
+    if (newTaskArray[i].state == true) {
+      newTaskArray.splice(i, 1);
+      console.log(newTaskArray);
+    }
+  }
+
+  taskArray = newTaskArray;
+
+  showTaskList();
+});
+
+buttonDone.addEventListener("click", function () {
+  let newTaskArray = [...taskArray];
+
+  for (let i = newTaskArray.length - 1; i >= 0; i--) {
+    if (newTaskArray[i].state == false) {
+      newTaskArray.splice(i, 1);
+      console.log(newTaskArray);
+    }
+  }
+
+  taskArray = newTaskArray;
+
+  showTaskList();
+});
+
+buttonAll.addEventListener("click", function () {
+  taskArray = taskArray;
+  console.log(taskArray);
+  showTaskList();
+});
+
 // LOGIQUE ÉTAPE 3 – FILTRES & ÉTAT DES TÂCHES
-
-// 1) Dans addTask :
-// - Quand j’ajoute une tâche dans taskArray, je ne push pas seulement le texte (taskInput.value)
-// - Je dois aussi stocker l’état de la tâche
-// - Par défaut, une tâche nouvellement créée n’est PAS faite → état = false
-
-// → taskArray doit donc contenir des tâches avec :
-//   - le texte
-//   - un booléen (fait / non fait)
-
-// 2) Checkbox "Fait / Non fait" :
-// - La checkbox ne crée pas une nouvelle tâche
-// - Elle sert uniquement à MODIFIER l’état d’une tâche existante
-// - Quand l’utilisateur clique sur "Fait", je mets l’état de la tâche correspondante à true
-// - Quand il décoche, je remets l’état à false
-// - Cette modification doit se faire directement dans taskArray
 
 // ON NE PEUT PAS METTRE DE LISTENER A UNE CHECKBOX
 
